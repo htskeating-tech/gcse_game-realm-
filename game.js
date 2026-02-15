@@ -12,8 +12,6 @@ const REALMS = [
   "RE / Philosophy"
 ];
 
-const MAX_XP = 100; // per level bar; you can change this
-
 // Simple random quest templates per realm
 const QUEST_TEMPLATES = {
   English: [
@@ -66,7 +64,8 @@ const QUEST_TEMPLATES = {
 // ----- State -----
 
 let state = {
-  xp: {},                 // { realm: xp }
+  xp: {},                 // { realm: xp (0–99) }
+  levels: {},             // { realm: level }
   activeQuests: [],       // [{ id, realm, title, xp, desc }]
   completedQuests: [],    // [{ id, realm, title, xp, desc, completedAt }]
   selectedQuestId: null,
@@ -76,12 +75,13 @@ let state = {
 
 REALMS.forEach(r => {
   state.xp[r] = 0;
+  state.levels[r] = 1;
   state.openRealms[r] = false;
 });
 
 // ----- LocalStorage helpers -----
 
-const STORAGE_KEY = "gcseQuestGameState_v1";
+const STORAGE_KEY = "gcseQuestGameState_v2";
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -92,16 +92,41 @@ function loadState() {
   if (!raw) return;
   try {
     const parsed = JSON.parse(raw);
-    // Merge safely
+
     if (parsed.xp) state.xp = { ...state.xp, ...parsed.xp };
+    if (parsed.levels) state.levels = { ...state.levels, ...parsed.levels };
     if (Array.isArray(parsed.activeQuests)) state.activeQuests = parsed.activeQuests;
     if (Array.isArray(parsed.completedQuests)) state.completedQuests = parsed.completedQuests;
     if (typeof parsed.darkMode === "boolean") state.darkMode = parsed.darkMode;
     if (parsed.openRealms) state.openRealms = { ...state.openRealms, ...parsed.openRealms };
     if (parsed.selectedQuestId) state.selectedQuestId = parsed.selectedQuestId;
+
+    // Ensure all realms exist
+    REALMS.forEach(r => {
+      if (typeof state.xp[r] !== "number") state.xp[r] = 0;
+      if (typeof state.levels[r] !== "number") state.levels[r] = 1;
+      if (typeof state.openRealms[r] !== "boolean") state.openRealms[r] = false;
+    });
   } catch (e) {
     console.error("Failed to load state:", e);
   }
+}
+
+// ----- XP + Level helpers -----
+
+function addXpToRealm(realm, amount) {
+  if (typeof state.xp[realm] !== "number") state.xp[realm] = 0;
+  if (typeof state.levels[realm] !== "number") state.levels[realm] = 1;
+
+  state.xp[realm] += amount;
+
+  while (state.xp[realm] >= 100) {
+    state.xp[realm] -= 100;
+    state.levels[realm] += 1;
+  }
+
+  saveState();
+  renderXpBars();
 }
 
 // ----- DOM refs -----
@@ -161,15 +186,14 @@ function renderXpBars() {
 
     const label = document.createElement("div");
     label.className = "xp-bar-label";
-    label.textContent = `${realm}: ${state.xp[realm]} XP`;
+    label.textContent = `${realm}: Level ${state.levels[realm]} — ${state.xp[realm]}/100 XP`;
 
     const bar = document.createElement("div");
     bar.className = "xp-bar";
 
     const fill = document.createElement("div");
     fill.className = "xp-bar-fill";
-    const pct = Math.min(100, (state.xp[realm] / MAX_XP) * 100);
-    fill.style.width = pct + "%";
+    fill.style.width = `${state.xp[realm]}%`;
 
     bar.appendChild(fill);
     row.appendChild(label);
@@ -201,7 +225,6 @@ function renderRealmsAndQuests() {
 
     left.appendChild(arrow);
     left.appendChild(title);
-
     header.appendChild(left);
 
     header.addEventListener("click", () => {
@@ -229,14 +252,12 @@ function renderRealmsAndQuests() {
       tick.className = "quest-tick";
       tick.textContent = "✓";
 
-      // Clicking text selects quest
       text.addEventListener("click", () => {
         state.selectedQuestId = q.id;
         saveState();
         renderQuestDetails();
       });
 
-      // Clicking tick completes quest (with confirm)
       tick.addEventListener("click", (e) => {
         e.stopPropagation();
         const ok = confirm("Are you sure you want to complete this quest?");
@@ -318,25 +339,20 @@ function completeQuestById(id) {
   if (idx === -1) return;
   const q = state.activeQuests[idx];
 
-  // Add XP
-  state.xp[q.realm] = (state.xp[q.realm] || 0) + q.xp;
+  addXpToRealm(q.realm, q.xp);
 
-  // Move to completed
   state.completedQuests.push({
     ...q,
     completedAt: Date.now()
   });
 
-  // Remove from active
   state.activeQuests.splice(idx, 1);
 
-  // If this was selected, clear selection
   if (state.selectedQuestId === id) {
     state.selectedQuestId = null;
   }
 
   saveState();
-  renderXpBars();
   renderRealmsAndQuests();
   renderQuestDetails();
   renderQuestLog();
@@ -373,9 +389,7 @@ collapseAllBtn.addEventListener("click", () => {
 addXpBtn.addEventListener("click", () => {
   const realm = realmSelect.value;
   const xp = parseInt(xpPresetSelect.value, 10) || 0;
-  state.xp[realm] = (state.xp[realm] || 0) + xp;
-  saveState();
-  renderXpBars();
+  addXpToRealm(realm, xp);
 });
 
 generateQuestBtn.addEventListener("click", () => {
