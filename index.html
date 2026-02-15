@@ -1,96 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>GCSE Quest Realms</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>GCSE Quest Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-  <header>
-    <h1>GCSE Quest Realms</h1>
-    <button id="darkModeToggle">Toggle Dark Mode</button>
-  </header>
-
-  <main>
-
-    <!-- SIDEBAR: REALMS + QUESTS -->
-    <section class="sidebar">
-      <div class="sidebar-header">
-        <h2>Realms & Quests</h2>
-        <button id="collapseAllBtn">Collapse All</button>
+  <div class="app">
+    <header class="app-header">
+      <div class="title-block">
+        <h1>GCSE Quest Tracker</h1>
+        <p>Turn your revision into XP, levels, and quests.</p>
       </div>
-
-      <div id="realmsContainer">
-        <!-- Realms + quests injected by JS -->
+      <div class="header-actions">
+        <button id="darkModeToggle" class="btn secondary">Dark Mode</button>
+        <button id="resetBtn" class="btn danger">Reset All Progress</button>
       </div>
-    </section>
+    </header>
 
-    <!-- MAIN CONTENT -->
-    <section class="content">
-
-      <!-- XP PANEL -->
-      <div class="xp-panel">
-        <h2>XP & Manual Rewards</h2>
-
-        <label for="realmSelect">Realm:</label>
-        <select id="realmSelect"></select>
-
-        <label for="xpPresetSelect">XP Reward:</label>
-        <select id="xpPresetSelect">
-          <option value="5">5 XP</option>
-          <option value="10">10 XP</option>
-          <option value="20">20 XP</option>
-          <option value="25">25 XP</option>
-          <option value="50">50 XP</option>
-          <option value="100">100 XP</option>
-        </select>
-
-        <button id="addXpBtn">Add XP</button>
-
-        <div id="xpBarsContainer"></div>
-
-        <!-- RESET BUTTON -->
-        <button id="resetBtn" style="margin-top:10px; background:#d9534f; color:white;">
-          Reset All Progress
-        </button>
-      </div>
-
-      <!-- RANDOM QUEST GENERATOR -->
-      <div class="quest-actions">
-        <h2>Random Quest Generator</h2>
-
-        <label for="generatorRealmSelect">Realm:</label>
-        <select id="generatorRealmSelect"></select>
-
-        <button id="generateQuestBtn">Generate Quest</button>
-      </div>
-
-      <!-- QUEST DETAILS PANEL -->
-      <div class="quest-details">
-        <h2>Quest Details</h2>
-
-        <p><strong>Title:</strong> <span id="detailTitle">None selected</span></p>
-        <p><strong>Realm:</strong> <span id="detailRealm">-</span></p>
-        <p><strong>XP:</strong> <span id="detailXp">-</span></p>
-
-        <p><strong>Description:</strong></p>
-        <p id="detailDescription">Select a quest to see details.</p>
-
-        <div class="detail-buttons">
-          <button id="completeQuestBtn" disabled>Complete Quest</button>
-          <button id="abandonQuestBtn" disabled>Abandon Quest</button>
+    <main class="app-main">
+      <!-- Left: Realms & quests -->
+      <section class="panel panel-left">
+        <div class="panel-header">
+          <h2>Realms & Quests</h2>
+          <button id="collapseAllBtn" class="btn small secondary">Collapse All</button>
         </div>
-      </div>
+        <div id="realmsContainer" class="realms-container">
+          <!-- JS will render realms + quests here -->
+        </div>
+      </section>
 
-      <!-- QUEST LOG -->
-      <div class="quest-log">
-        <h2>Quest Log</h2>
-        <ul id="questLogList"></ul>
-      </div>
+      <!-- Right: XP, generator, details, log -->
+      <section class="panel panel-right">
+        <!-- XP controls -->
+        <section class="card">
+          <h2>XP & Levels</h2>
+          <div class="xp-controls">
+            <label>
+              Realm:
+              <select id="realmSelect"></select>
+            </label>
+            <label>
+              XP:
+              <select id="xpPresetSelect">
+                <option value="5">+5 XP</option>
+                <option value="10">+10 XP</option>
+                <option value="15">+15 XP</option>
+                <option value="20">+20 XP</option>
+                <option value="25">+25 XP</option>
+                <option value="30">+30 XP</option>
+                <option value="40">+40 XP</option>
+                <option value="50">+50 XP</option>
+              </select>
+            </label>
+            <button id="addXpBtn" class="btn primary">Add XP</button>
+          </div>
+          <div id="xpBarsContainer" class="xp-bars-container">
+            <!-- JS renders XP bars here -->
+          </div>
+        </section>
 
-    </section>
-  </main>
+        <!-- Quest generator -->
+        <section class="card">
+          <h2>Quest Generator</h2>
+          <div class="generator-controls">
+            <label>
+              Realm:
+              <select id="generatorRealmSelect"></select>
+            </label>
+            <button id="generateQuestBtn" class="btn primary">Generate Quest</button>
+          </div>
+          <p class="hint">
+            Pick a realm and generate a random, exam‑specific revision quest.
+          </p>
+        </section>
+
+        <!-- Quest details -->
+        <section class="card">
+          <h2>Quest Details</h2>
+          <div class="quest-details">
+            <h3 id="detailTitle">None selected</h3>
+            <p><strong>Realm:</strong> <span id="detailRealm">-</span></p>
+            <p><strong>XP:</strong> <span id="detailXp">-</span></p>
+            <p id="detailDescription">Select a quest from the left to see details.</p>
+          </div>
+          <div class="quest-actions">
+            <button id="completeQuestBtn" class="btn primary" disabled>Complete Quest</button>
+            <button id="abandonQuestBtn" class="btn secondary" disabled>Abandon Quest</button>
+          </div>
+        </section>
+
+        <!-- Quest log -->
+        <section class="card">
+          <h2>Quest Log</h2>
+          <ul id="questLogList" class="quest-log-list">
+            <!-- JS renders completed quests here -->
+          </ul>
+        </section>
+      </section>
+    </main>
+  </div>
 
   <script src="game.js"></script>
 </body>
