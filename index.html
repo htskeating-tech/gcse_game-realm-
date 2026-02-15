@@ -5,6 +5,7 @@
   <title>GCSE Quest Realms</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <header>
     <h1>GCSE Quest Realms</h1>
@@ -12,19 +13,26 @@
   </header>
 
   <main>
+
+    <!-- SIDEBAR: REALMS + QUESTS -->
     <section class="sidebar">
       <div class="sidebar-header">
         <h2>Realms & Quests</h2>
         <button id="collapseAllBtn">Collapse All</button>
       </div>
+
       <div id="realmsContainer">
-        <!-- Realms and quests injected here -->
+        <!-- Realms + quests injected by JS -->
       </div>
     </section>
 
+    <!-- MAIN CONTENT -->
     <section class="content">
+
+      <!-- XP PANEL -->
       <div class="xp-panel">
         <h2>XP & Manual Rewards</h2>
+
         <label for="realmSelect">Realm:</label>
         <select id="realmSelect"></select>
 
@@ -40,39 +48,50 @@
 
         <button id="addXpBtn">Add XP</button>
 
-        <div id="xpBarsContainer">
-          <!-- XP bars injected here -->
-        </div>
+        <div id="xpBarsContainer"></div>
+
+        <!-- RESET BUTTON -->
+        <button id="resetBtn" style="margin-top:10px; background:#d9534f; color:white;">
+          Reset All Progress
+        </button>
       </div>
 
+      <!-- RANDOM QUEST GENERATOR -->
       <div class="quest-actions">
         <h2>Random Quest Generator</h2>
+
         <label for="generatorRealmSelect">Realm:</label>
         <select id="generatorRealmSelect"></select>
+
         <button id="generateQuestBtn">Generate Quest</button>
       </div>
 
+      <!-- QUEST DETAILS PANEL -->
       <div class="quest-details">
         <h2>Quest Details</h2>
+
         <p><strong>Title:</strong> <span id="detailTitle">None selected</span></p>
         <p><strong>Realm:</strong> <span id="detailRealm">-</span></p>
         <p><strong>XP:</strong> <span id="detailXp">-</span></p>
+
         <p><strong>Description:</strong></p>
         <p id="detailDescription">Select a quest to see details.</p>
+
         <div class="detail-buttons">
           <button id="completeQuestBtn" disabled>Complete Quest</button>
           <button id="abandonQuestBtn" disabled>Abandon Quest</button>
         </div>
       </div>
 
+      <!-- QUEST LOG -->
       <div class="quest-log">
         <h2>Quest Log</h2>
         <ul id="questLogList"></ul>
       </div>
+
     </section>
   </main>
 
   <script src="game.js"></script>
-
 </body>
 </html>
