@@ -1,36 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>GCSE Mastery Game</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>GCSE Quest Realms</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>GCSE Quest Realms</h1>
+    <button id="darkModeToggle">Toggle Dark Mode</button>
+  </header>
 
-<button id="darkToggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+  <main>
+    <section class="sidebar">
+      <div class="sidebar-header">
+        <h2>Realms & Quests</h2>
+        <button id="collapseAllBtn">Collapse All</button>
+      </div>
+      <div id="realmsContainer">
+        <!-- Realms and quests injected here -->
+      </div>
+    </section>
 
-<h1>GCSE Mastery Game</h1>
+    <section class="content">
+      <div class="xp-panel">
+        <h2>XP & Manual Rewards</h2>
+        <label for="realmSelect">Realm:</label>
+        <select id="realmSelect"></select>
 
-<div id="status"></div>
+        <label for="xpPresetSelect">XP Reward:</label>
+        <select id="xpPresetSelect">
+          <option value="5">5 XP</option>
+          <option value="10">10 XP</option>
+          <option value="20">20 XP</option>
+          <option value="25">25 XP</option>
+          <option value="50">50 XP</option>
+          <option value="100">100 XP</option>
+        </select>
 
-<h2>Log a Quest</h2>
+        <button id="addXpBtn">Add XP</button>
 
-<label>Choose Realm:</label>
-<select id="realmSelect"></select>
+        <div id="xpBarsContainer">
+          <!-- XP bars injected here -->
+        </div>
+      </div>
 
-<label>Quest Type:</label>
-<select id="questSelect">
-    <option value="small">Small (+10 XP)</option>
-    <option value="medium">Medium (+25 XP)</option>
-    <option value="large">Large (+50 XP)</option>
-    <option value="boss">Boss (+100 XP)</option>
-</select>
+      <div class="quest-actions">
+        <h2>Random Quest Generator</h2>
+        <label for="generatorRealmSelect">Realm:</label>
+        <select id="generatorRealmSelect"></select>
+        <button id="generateQuestBtn">Generate Quest</button>
+      </div>
 
-<button onclick="logQuest()">Add XP</button>
+      <div class="quest-details">
+        <h2>Quest Details</h2>
+        <p><strong>Title:</strong> <span id="detailTitle">None selected</span></p>
+        <p><strong>Realm:</strong> <span id="detailRealm">-</span></p>
+        <p><strong>XP:</strong> <span id="detailXp">-</span></p>
+        <p><strong>Description:</strong></p>
+        <p id="detailDescription">Select a quest to see details.</p>
+        <div class="detail-buttons">
+          <button id="completeQuestBtn" disabled>Complete Quest</button>
+          <button id="abandonQuestBtn" disabled>Abandon Quest</button>
+        </div>
+      </div>
 
-<h2>Reset Progress</h2>
-<button onclick="resetProgress()">RESET</button>
+      <div class="quest-log">
+        <h2>Quest Log</h2>
+        <ul id="questLogList"></ul>
+      </div>
+    </section>
+  </main>
 
-<script src="game.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>
