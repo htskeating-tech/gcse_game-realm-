@@ -81,7 +81,7 @@ REALMS.forEach(r => {
 
 // ----- LocalStorage helpers -----
 
-const STORAGE_KEY = "gcseQuestGameState_v2";
+const STORAGE_KEY = "gcseQuestGameState_v3";
 
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -101,7 +101,6 @@ function loadState() {
     if (parsed.openRealms) state.openRealms = { ...state.openRealms, ...parsed.openRealms };
     if (parsed.selectedQuestId) state.selectedQuestId = parsed.selectedQuestId;
 
-    // Ensure all realms exist
     REALMS.forEach(r => {
       if (typeof state.xp[r] !== "number") state.xp[r] = 0;
       if (typeof state.levels[r] !== "number") state.levels[r] = 1;
@@ -151,6 +150,7 @@ const completeQuestBtn = document.getElementById("completeQuestBtn");
 const abandonQuestBtn = document.getElementById("abandonQuestBtn");
 
 const questLogList = document.getElementById("questLogList");
+const resetBtn = document.getElementById("resetBtn");
 
 // ----- Rendering -----
 
@@ -370,6 +370,30 @@ function abandonQuestById(id) {
   renderQuestDetails();
 }
 
+// ----- Reset all progress -----
+
+function resetAllProgress() {
+  const ok = confirm("Are you sure you want to reset ALL progress? This cannot be undone.");
+  if (!ok) return;
+
+  REALMS.forEach(r => {
+    state.xp[r] = 0;
+    state.levels[r] = 1;
+    state.openRealms[r] = false;
+  });
+
+  state.activeQuests = [];
+  state.completedQuests = [];
+  state.selectedQuestId = null;
+
+  saveState();
+
+  renderXpBars();
+  renderRealmsAndQuests();
+  renderQuestDetails();
+  renderQuestLog();
+}
+
 // ----- Event wiring -----
 
 darkModeToggle.addEventListener("click", () => {
@@ -410,6 +434,10 @@ abandonQuestBtn.addEventListener("click", () => {
   if (!ok) return;
   abandonQuestById(state.selectedQuestId);
 });
+
+if (resetBtn) {
+  resetBtn.addEventListener("click", resetAllProgress);
+}
 
 // ----- Init -----
 
