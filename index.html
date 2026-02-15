@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GCSE Mastery Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button id="darkToggle" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+
+<h1>GCSE Mastery Game</h1>
+
+<div id="status"></div>
+
+<h2>Log a Quest</h2>
+
+<label>Choose Realm:</label>
+<select id="realmSelect"></select>
+
+<label>Quest Type:</label>
+<select id="questSelect">
+    <option value="small">Small (+10 XP)</option>
+    <option value="medium">Medium (+25 XP)</option>
+    <option value="large">Large (+50 XP)</option>
+    <option value="boss">Boss (+100 XP)</option>
+</select>
+
+<button onclick="logQuest()">Add XP</button>
+
+<h2>Reset Progress</h2>
+<button onclick="resetProgress()">RESET</button>
+
+<script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 40px;
+    background: #f4f4f4;
+    color: #222;
+    transition: 0.3s;
+}
+
+.dark {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#status {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.dark #status {
+    background: #1e1e1e;
+}
+
+.xp-bar-container {
+    width: 100%;
+    background: #ddd;
+    border-radius: 6px;
+    margin: 5px 0 15px 0;
+}
+
+.dark .xp-bar-container {
+    background: #333;
+}
+
+.xp-bar {
+    height: 18px;
+    background: #4caf50;
+    border-radius: 6px;
+    width: 0%;
+    transition: width 0.4s;
+}
+
+#darkToggle {
+    float: right;
+    margin-bottom: 20px;
+}
