@@ -390,7 +390,24 @@ function generateId() {
 function addRandomQuest(realm) {
   const templates = QUEST_TEMPLATES[realm];
   if (!templates || templates.length === 0) return;
-  const t = templates[Math.floor(Math.random() * templates.length)];
+
+  // Prevent duplicate quests
+  const existingTitles = state.activeQuests
+    .filter(q => q.realm === realm)
+    .map(q => q.title);
+
+  // Filter out templates that already exist
+  const available = templates.filter(t => !existingTitles.includes(t.title));
+
+  // If all quests are already active, stop
+  if (available.length === 0) {
+    alert("You've already generated all quests for this realm!");
+    return;
+  }
+
+  // Pick a random quest from the remaining pool
+  const t = available[Math.floor(Math.random() * available.length)];
+
   const quest = {
     id: generateId(),
     realm,
@@ -398,6 +415,7 @@ function addRandomQuest(realm) {
     xp: t.xp,
     desc: t.desc
   };
+
   state.activeQuests.push(quest);
   state.selectedQuestId = quest.id;
   saveState();
