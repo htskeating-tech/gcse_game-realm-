@@ -115,7 +115,7 @@ const QUEST_TEMPLATES = {
     { title: "20-mark question practice", xp: 40, desc: "Write a 20-mark essay." }
   ],
 
-  : [
+  Computing: [
     { title: "Flowcharts & pseudocode", xp: 25, desc: "Write and trace algorithms." },
     { title: "Searching & sorting", xp: 25, desc: "Binary search, merge sort." },
     { title: "Data types & structures", xp: 20, desc: "Arrays, casting, types." },
