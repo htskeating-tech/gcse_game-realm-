@@ -8,7 +8,7 @@ const REALMS = [
   "Biology",
   "Physics",
   "History",
-  ""
+  "Computing"
 ];
 
 const QUEST_TEMPLATES = {
